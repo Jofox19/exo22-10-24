@@ -76,8 +76,26 @@ document.getElementById('addTaskButton').addEventListener('click', () => {
     if (taskTitle) {
         taskManager.addTask(taskTitle);
         taskInput.value = '';
-        errorMessage.innerText = ''; 
+        errorMessage.innerText = '';
     } else {
-        errorMessage.innerText = 'Le champ de saisie ne peut pas être vide';  
+        errorMessage.innerText = 'Le champ de saisie ne peut pas être vide';
     }
+});
+
+document.getElementById('addRandomTaskButton').addEventListener('click', () => {
+    fetch('https://www.boredapi.com/api/activity')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération de l\'activité');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const randomTask = data.activity;
+            taskManager.addTask(randomTask);
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération de la tâche aléatoire:', error);
+            alert("Une erreur s'est produite lors de la récupération d'une tâche aléatoire. Veuillez réessayer.");
+        });
 });
